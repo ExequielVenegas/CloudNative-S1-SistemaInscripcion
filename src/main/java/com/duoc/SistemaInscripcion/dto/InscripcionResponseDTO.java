@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 public class InscripcionResponseDTO {
+    private Long id;
     private Estudiante estudiante;
     private List<Curso> cursos;
     private Double totalPagar;

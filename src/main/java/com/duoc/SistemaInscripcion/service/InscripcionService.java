@@ -22,30 +22,39 @@ public class InscripcionService {
 
     public InscripcionResponseDTO inscribir(InscripcionRequestDTO request) {
 
-        // Busca el estudiante
         Estudiante estudiante = estudianteRepository.findById(request.getEstudianteId())
                 .orElseThrow(() -> new RuntimeException("Estudiante no encontrado"));
 
-        // Busca los cursos
         List<Curso> cursos = cursoRepository.findAllById(request.getCursoIds());
 
-        // Calcula el total
         double total = cursos.stream()
                 .mapToDouble(Curso::getCosto)
                 .sum();
 
-        // Guarda la inscripción
         Inscripcion inscripcion = new Inscripcion();
         inscripcion.setEstudiante(estudiante);
         inscripcion.setCursos(cursos);
         inscripcion.setTotalPagar(total);
         inscripcionRepository.save(inscripcion);
 
-        // Arma la respuesta
         InscripcionResponseDTO response = new InscripcionResponseDTO();
+        response.setId(inscripcion.getId());
         response.setEstudiante(estudiante);
         response.setCursos(cursos);
         response.setTotalPagar(total);
         return response;
+    }
+
+    public List<InscripcionResponseDTO> obtenerTodas() {
+        return inscripcionRepository.findAll().stream()
+                .map(inscripcion -> {
+                    InscripcionResponseDTO response = new InscripcionResponseDTO();
+                    response.setId(inscripcion.getId());
+                    response.setEstudiante(inscripcion.getEstudiante());
+                    response.setCursos(inscripcion.getCursos());
+                    response.setTotalPagar(inscripcion.getTotalPagar());
+                    return response;
+                })
+                .collect(java.util.stream.Collectors.toList());
     }
 }
