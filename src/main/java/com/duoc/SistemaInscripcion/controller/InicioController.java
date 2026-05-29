@@ -14,7 +14,7 @@ public class InicioController {
     public ResponseEntity<Map<String, String>> home() {
         return ResponseEntity.ok(Map.of(
                 "mensaje", "Bienvenido a la Plataforma Educativa",
-                "version", "1.1.2",
+                "version", "1.2.0",
                 "status", "online"
         ));
     }
